@@ -183,9 +183,9 @@ class Registrations extends Component
                     //dd( $cityResponse );
                     //$this->adShip->city->name = $cityResponse->name;
                     //$this->adShip->city_id = $cityResponse->id;
-                    //$this->cityName = $cityResponse->name;
-                    //$this->cityState = $cityResponse->state->initials;
-                    //dd( $this->adShip->city_state );
+                    $this->cityName = $cityResponse->name;
+                    $this->cityState = $cityResponse->state->initials;
+
                 } else {
                     return $this->adShip->postcode = 'CEP não existe';
                 }
