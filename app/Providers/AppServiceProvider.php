@@ -30,7 +30,7 @@ class AppServiceProvider extends ServiceProvider
         Schema::defaultStringLength(191);
         //quebra de linha para text no blade
         //\Blade::setEchoFormat('nl2br(e(%s))');
-        //Avisar sobre erros de excesso de consultas ao bd	
-		Model::preventLazyLoading(! app()->isProduction());
+        //Avisar sobre erros de excesso de consultas ao bd
+		//Model::preventLazyLoading(! app()->isProduction());
     }
 }

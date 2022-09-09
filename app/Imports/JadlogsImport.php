@@ -12,12 +12,13 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
 
 
-class JadlogsImport implements ToModel, WithHeadingRow, WithChunkReading, ShouldQueue
+class JadlogsImport implements ToModel, WithHeadingRow, WithChunkReading
 {
 
     public function model(array $row)
     {
-        if ($row['id']) {
+
+        if (array_key_exists('id', $row)) {
             Jadlog::where('id', $row['id'])
                 ->update([
                     'region' => $row['region'],
@@ -29,13 +30,17 @@ class JadlogsImport implements ToModel, WithHeadingRow, WithChunkReading, Should
                     'deadline' => $row['deadline'],
                 ]);
         } else {
+
+            $price = $row['value'] * 100;
+
+
             Jadlog::create([
                 'region' => $row['region'],
                 'zipini' => $row['zipini'],
                 'zipfin' => $row['zipfin'],
                 'wini' => $row['wini'],
                 'wfin' => $row['wfin'],
-                'value' => $row['value'],
+                'value' => $price,
                 'deadline' => $row['deadline'],
             ]);
         }

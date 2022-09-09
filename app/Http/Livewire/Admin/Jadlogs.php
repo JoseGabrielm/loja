@@ -36,21 +36,21 @@ class Jadlogs extends Component
         'form.value' => 'required|min:0',
         'form.deadline' => 'required|min:0',
     ];
-    
+
 
     public function mount()
     {
-  
+
     }
 
     public function getJadlogsProperty()
-    {    
+    {
         if($this->search){
             $jadlogs = Jadlog::orderBy('zipini')->where('zipini', '=',  (int)$this->search)->orWhere('wini', '=',  (int)$this->search)->paginate();
         }else{
             $jadlogs = Jadlog::orderBy('zipini')->paginate();
-        }  
-    
+        }
+
         //dd($ships);
         return $jadlogs;
     }
@@ -98,8 +98,8 @@ class Jadlogs extends Component
 
     public function export()
     {
-        ini_set('memory_limit','1024');            
-        set_time_limit(1200000);                       
+        ini_set('memory_limit','1024');
+        set_time_limit(1200000);
         return Excel::download(new JadlogsExport, 'fretes.xlsx');
     }
 
@@ -110,12 +110,16 @@ class Jadlogs extends Component
 
     public function import()
     {
-        $this->validate(['path'=>'required|mimes:xlsx,xls']);
+
+        //dd($this->path);
+
         $this->modalImportOpened = false;
-        //dd($this->path);  
-        ini_set('memory_limit','-1');            
-        set_time_limit(1200000);       
-        Excel::import(new JadlogsImport, $this->path);      
+        //dd($this->path);
+
+        ini_set('memory_limit', '-1');
+        set_time_limit(1200000);
+
+        Excel::import(new JadlogsImport, $this->path->path());
         return redirect()->back()->with('importSuccess', 'Importado com Sucesso');;
     }
 
