@@ -5,10 +5,11 @@ namespace App\Imports;
 use App\Models\Jadlog;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Concerns\ToModel;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
 
 
@@ -31,7 +32,8 @@ class JadlogsImport implements ToModel, WithHeadingRow, WithChunkReading
                 ]);
         } else {
 
-            $price = $row['value'] * 100;
+            Log::info((int)$row['value']);
+            $price = ((int)$row['value'] * 100);
 
 
             Jadlog::create([
