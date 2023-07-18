@@ -2,6 +2,7 @@
 
 
 use Illuminate\Http\Request;
+use App\Http\Controllers\OrderController;
 use App\Classes\GetNotification;
 use Illuminate\Support\Facades\Route;
 use App\Http\Livewire\Front\Checkouts;
@@ -23,7 +24,12 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 
 
-    Route::post('/pagamento/{orderId}',  [Checkouts::class, 'payCard'])->name('card.pagamento');
-    Route::post('/notification', [GetNotification::class, 'index'])->name('notification');
+Route::post('/pagamento/{orderId}',  [Checkouts::class, 'payCard'])->name('card.pagamento');
+Route::post('/notification', [GetNotification::class, 'index'])->name('notification');
 
 
+Route::middleware(['api'])->group(function () {
+
+
+    Route::post('/getOrders', [OrderController::class, 'getOrders']);
+});

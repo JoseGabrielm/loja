@@ -19,6 +19,9 @@ class JadlogsImport implements ToModel, WithHeadingRow, WithChunkReading
     public function model(array $row)
     {
 
+        $price = ((int)$row['value'] * 100);
+
+
         if (array_key_exists('id', $row)) {
             Jadlog::where('id', $row['id'])
                 ->update([
@@ -27,14 +30,10 @@ class JadlogsImport implements ToModel, WithHeadingRow, WithChunkReading
                     'zipfin' => $row['zipfin'],
                     'wini' => $row['wini'],
                     'wfin' => $row['wfin'],
-                    'value' => $row['value'],
+                    'value' => $price,
                     'deadline' => $row['deadline'],
                 ]);
         } else {
-
-            Log::info((int)$row['value']);
-            $price = ((int)$row['value'] * 100);
-
 
             Jadlog::create([
                 'region' => $row['region'],

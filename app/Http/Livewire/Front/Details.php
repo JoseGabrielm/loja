@@ -34,7 +34,7 @@ class Details extends Component {
         $this->zip = session( 'zipSimulador' );
         if ( $request->slug ) {
             $this->group = Group::where( 'slug', $request->slug )->first();
-            //dd($this->group);
+
             $this->images = $this->group->images()->where( 'type', 'Detalhe' )->limit(4)->get();
 
             $this->products = Product::where( 'group_id', $this->group->id )->where( 'active', 1 )->orderBy('order')->get();

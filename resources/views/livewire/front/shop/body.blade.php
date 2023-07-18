@@ -1,4 +1,3 @@
-
 <datagrid class="flex flex-row justify-center flex-1 m-4 ">
     <div class="">
         <div class="relative w-64 group">
@@ -22,9 +21,9 @@
                     @if ($shop->products->first())
                         <p class="block text-sm font-semibold leading-tight text-cinza-900">
                             De
-                            {{ 'R$ ' . number_format( $shop->products->min('price'), 2, ',', '.') }}
+                            {{ 'R$ ' . number_format($shop->products->min('price'), 2, ',', '.') }}
                             a
-                            {{ 'R$ ' . number_format( $shop->products->max('price') , 2, ',', '.') }}
+                            {{ 'R$ ' . number_format($shop->products->max('price'), 2, ',', '.') }}
                         </p>
                     @endif
                     <article class="text-xs text-cinza-700">

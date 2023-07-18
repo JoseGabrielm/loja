@@ -1,36 +1,33 @@
+<div class="relative " x-data="{
+    activeSlide: 1,
+    slides: [1, 2, 3, 4, 5],
+    loop() {
+        setInterval(() => { this.activeSlide = this.activeSlide === 5 ? 1 : this.activeSlide + 1 }, 4000)
+    },
 
-
-<div class="relative "
-     x-data="{  activeSlide: 1,
-                slides: [1, 2, 3, 4, 5],
-                loop() {
-                  setInterval(() => { this.activeSlide = this.activeSlide === 5 ? 1 : this.activeSlide+1 }, 4000)
-                },
-
-            }"
-     x-init="loop"
->
+}" x-init="loop">
     <!-- Slides -->
 
-
-
-
-    <div  x-show="activeSlide === 1" class="flex items-center ">
-        <img class = "w-auto h-auto" src="{{ asset('storage/banner2.jpg') }}" alt="{{ __('') }}">
+    <div x-show="activeSlide === 1" class="flex items-center">
+        <img class="aspect-ratio md:w-auto md:h-auto" src="{{ asset('storage/banner2.jpg') }}" alt="{{ __('') }}">
     </div>
 
-    <div class = "" x-show="activeSlide === 2" class="flex items-center " >
-           <img src="{{ asset('storage/banner1.jpg') }}" alt="{{ __('') }}">
+    <div class="" x-show="activeSlide === 2" class="flex items-center ">
+        <img class="aspect-ratio md:w-auto md:h-auto" src="{{ asset('storage/banner1.jpg') }}"
+            alt="{{ __('') }}">
     </div>
 
-    <div class = "" x-show="activeSlide === 3" class="flex items-center ">
-        <img src="{{ asset('storage/banner3.jpg') }}" alt="{{ __('') }}">
+    <div class="" x-show="activeSlide === 3" class="flex items-center ">
+        <img class="aspect-ratio md:w-auto md:h-auto" src="{{ asset('storage/banner3.jpg') }}"
+            alt="{{ __('') }}">
     </div>
     <div x-show="activeSlide === 4" class="flex items-center ">
-        <img class = "" src="{{ asset('storage/banner4.jpg') }}" alt="{{ __('') }}">
+        <img class="aspect-ratio md:w-auto md:h-auto" class="" src="{{ asset('storage/banner4.jpg') }}"
+            alt="{{ __('') }}">
     </div>
-    <div class = "" x-show="activeSlide === 5" class="flex items-center ">
-        <img src="{{ asset('storage/banner5.jpg') }}" alt="{{ __('') }}">
+    <div class="" x-show="activeSlide === 5" class="flex items-center ">
+        <img class="aspect-ratio md:w-auto md:h-auto" src="{{ asset('storage/banner5.jpg') }}"
+            alt="{{ __('') }}">
     </div>
 
 
@@ -61,29 +58,28 @@
             <button
                 class="w-4 h-2 mx-2 mt-2 mb-0 overflow-hidden transition-colors duration-200 ease-out border-0 rounded-full hover:bg-marrom-600 hover:shadow-lg text-cinza-300 focus:outline-none focus:border-none"
                 :class="{
-            'bg-floresta-60': activeSlide === slide,
-            'bg-floresta-20': activeSlide !== slide
-        }" x-on:click="activeSlide = slide">
+                    'bg-floresta-60': activeSlide === slide,
+                    'bg-floresta-20': activeSlide !== slide
+                }"
+                x-on:click="activeSlide = slide">
             </button>
         </template>
     </div>
 
-<script>
+    <script>
+        setTimeout(function() {
+            let activeSlide = document.querySelector('.slide.translate-x-0');
+            activeSlide.classList.remove('translate-x-0');
+            activeSlide.classList.add('-translate-x-full');
 
-setTimeout(function(){
-    let activeSlide = document.querySelector('.slide.translate-x-0');
-    activeSlide.classList.remove('translate-x-0');
-    activeSlide.classList.add('-translate-x-full');
-
-    let nextSlide = activeSlide.nextElementSibling;
-    nextSlide.classList.remove('translate-x-full');
-    nextSlide.classList.add('translate-x-0');
-}, 3000);
-</script>
+            let nextSlide = activeSlide.nextElementSibling;
+            nextSlide.classList.remove('translate-x-full');
+            nextSlide.classList.add('translate-x-0');
+        }, 3000);
+    </script>
 
 
 
     <!-- Buttons -->
 
 </div>
-

@@ -31,8 +31,7 @@
     </div>
     <div class="flex flex-col items-baseline w-full space-y-3 md:flex-row md:space-x-6 md:space-y-0">
         <div class="flex items-baseline">
-            <x-form.label for="documentShip.is_company" value="{{ __('É uma empresa?') }}"
-                class="whitespace-nowrap" />
+            <x-form.label for="documentShip.is_company" value="{{ __('É uma empresa?') }}" class="whitespace-nowrap" />
             <input type="checkbox" wire:model.defer="iscompany" wire:click="$emit('refreshCompany')"
                 id="documentShip-is_company" class="mx-5 md:mt-1 md:mx-5" />
         </div>
@@ -86,27 +85,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <h1 class="pt-4 text-xl font-medium "> Dados de entrega </h1>
 
 
@@ -120,27 +98,24 @@
 
     <div class="flex flex-col items-baseline w-full space-y-3 md:flex-row md:space-x-6 md:space-y-0">
         <div class="flex items-baseline">
-            <x-form.label  value="{{ __('Gostaria de retirar no local?') }}"
-                class="whitespace-nowrap" />
-            <input type="checkbox"  wire:click="$toggle('retira')"
-                id="documentShip-is_company" class="mx-5 md:mt-1 md:mx-5" />
+            <x-form.label value="{{ __('Gostaria de retirar no local?') }}" class="whitespace-nowrap" />
+            <input type="checkbox" wire:click="$toggle('retira')" id="documentShip-is_company"
+                class="mx-5 md:mt-1 md:mx-5" />
         </div>
     </div>
 
 
 
 
-        @if ($retira == 1)
-
-
-        @else
+    @if ($retira == 1)
+    @else
         <div class="flex flex-col space-y-4 md:flex-row md:space-x-6 md:space-y-0">
 
 
             <div class="flex items-baseline pt-2 space-x-2 space-y-3 md:space-x-6 md:space-y-0">
                 <x-form.label for="addressShip.postcode" value="{{ __('CEP') }}" />
                 <x-form.text wire:model.defer="addressShip.postcode" id="addressShip-postcode" type="text"
-                    class="w-32 mt-1" />
+                    class="w-32 mt-1 text-center" />
                 <x-button.secundary wire:click="searchAddressShip" class="w-36 h-7">Importar Rua</x-button.secundary>
                 <x-alert.error-form for="addressShip.postcode" class="mt-2" />
 
@@ -149,7 +124,7 @@
             <div class="flex items-baseline w-full space-x-2">
                 <x-form.label for="addressShip.neighborhood" value="{{ __('Bairro') }}" />
                 <x-form.text wire:model.defer="addressShip.neighborhood" id="addressShip-neighborhood" type="text"
-                    class="w-5/12 mt-1" />
+                    class="w-7/12 mt-1" />
                 <x-alert.error-form for="addressShip.neighborhood" class="mt-2" />
             </div>
 
@@ -166,7 +141,7 @@
         </div>
 
 
-        <div class="flex flex-col w-fullspace-y-4 md:flex-row md:space-x-6 md:space-y-0">
+        <div class="flex flex-col w-full space-y-4 md:flex-row md:space-x-6 md:space-y-0">
 
 
             <div class="flex items-baseline w-full space-x-2">
@@ -183,35 +158,48 @@
 
 
 
-        <div class="flex flex-row items-center w-full space-x-2 space-y-3 md:space-x-6 md:space-y-0">
+        <div class="flex flex-col space-y-4 md:flex-row md:space-x-6 md:space-y-0">
 
-            <div class="flex items-baseline w-full space-x-2">
-                <x-form.label for="addressShip.complement" value="{{ __('Complemento') }}" />
-                <x-form.text wire:model.defer="addressShip.complement" rows="3" id="addressShip-complement"
-                    class="w-10/12 mt-1" />
-                <x-alert.error-form for="addressShip.complement" class="mt-2" />
-            </div>
+
 
             <div class="flex items-baseline space-x-2">
                 <x-form.label for="cityName" value="{{ __('Cidade') }}" />
-                <x-form.text wire:model.defer="cityName" rows="3" id="cityName" class="w-4/12 mt-1" readonly />
+                <x-form.text wire:model.defer="cityName" rows="3" id="cityName" class="w-6/12 mt-1"
+                    readonly />
                 <x-alert.error-form for="cityName" class="mt-2" />
             </div>
 
             <div class="flex items-baseline space-x-2">
                 <x-form.label for="cityState" value="{{ __('Estado') }}" />
-                <x-form.text wire:model.defer="cityState" rows="3" id="cityState" class="w-10 mt-1" readonly />
+                <x-form.text wire:model.defer="cityState" rows="3" id="cityState"
+                    class="w-10 mt-1 text-center" readonly />
                 <x-alert.error-form for="cityState" class="mt-2" />
             </div>
 
+        </div>
 
 
+        <div class="flex items-baseline space-x-2">
 
+            <div class="flex flex-col items-baseline w-full space-x-2 md:flex-row">
+                <x-form.label for="addressShip.complement" value="{{ __('Complemento: ') }}" />
+                <x-form.textarea wire:model.defer="addressShip.complement" rows="3" id="addressShip-complement"
+                    class="w-full mt-1" />
+                <x-alert.error-form for="addressShip.complement" class="mt-2" />
+            </div>
 
         </div>
 
-        @endif
 
+
+        <div class="">
+
+
+            @include('livewire.front.cart.selectAdresses')
+
+
+        </div>
+    @endif
 
 
 

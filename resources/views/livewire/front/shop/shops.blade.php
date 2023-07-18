@@ -5,7 +5,8 @@
                 @include('livewire.front.shop.slider')
             </div>
 
-            <div class="flex flex-wrap justify-between w-full gap-2 p-4 mt-6 text-lg font-semibold sm:px-36 md:text-2xl bg-verde-800 text-branco">
+            <div
+                class="flex flex-wrap justify-between w-full gap-2 p-4 mt-6 text-lg font-semibold sm:px-36 md:text-2xl bg-verde-800 text-branco">
 
 
                 @include('livewire.front.shop.categories')
@@ -15,8 +16,8 @@
 
         </header>
 
-        <section class="flex flex-row w-full">
-            <aside class="hidden w-1/6 md:block bg-verde-800 md:w-1/6 h-max">
+        <section class="flex flex-row w-full pt-2">
+            <aside class="hidden w-1/6 md:block bg-verde-800 md:w-1/6 ">
                 @include('livewire.front.shop.side')
             </aside>
 

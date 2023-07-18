@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 
 
 /**
@@ -63,64 +64,99 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Order extends Model
 {
-	public $with = ['order_products'];
+    public $with = ['order_products'];
 
-	protected $table = 'orders';
+    protected $hidden = [
+        'created_at',
+        'updated_at',
 
-	protected $casts = [
-		'total' => 'int',
-		'unitary_value' => 'int',
-		'base_currency' => 'int',
-		'ship_value' => 'int',
-		'ship_deadline' => 'int',
-		'ship_address' => 'int',
-		'discount' => 'int',
-		'sub_total' => 'int',
-		'grand_total' => 'int',
-		'clients_id' => 'int'
-	];
 
-	protected $fillable = [
-		'status',
-		'total',
-		'unitary_value',
-		'base_currency',
-		'ship_deadline',
-		'ship_form',
-		'ship_value',
-		'ship_zip',
-		'doc_type',
-		'doc_number',
-		'coupon_code',
-		'discount',
-		'sub_total',
-		'grand_total',
-		'payby',
-		'url_pay',
-		'payment_code',
+    ];
+
+
+    protected $table = 'orders';
+
+    protected $casts = [
+        'total' => 'int',
+        'unitary_value' => 'int',
+        'base_currency' => 'int',
+        'ship_value' => 'int',
+        'ship_deadline' => 'int',
+        'ship_address' => 'int',
+        'discount' => 'int',
+        'sub_total' => 'int',
+        'grand_total' => 'int',
+        'clients_id' => 'int'
+    ];
+
+    protected $fillable = [
+        'status',
+        'total',
+        'unitary_value',
+        'base_currency',
+        'ship_deadline',
+        'ship_form',
+        'ship_value',
+        'ship_zip',
+        'doc_type',
+        'doc_number',
+        'coupon_code',
+        'discount',
+        'sub_total',
+        'grand_total',
+        'payby',
+        'url_pay',
+        'payment_code',
         'idmetodo_metodo',
         'idbandeira_bandeira'
 
-	];
+    ];
 
-	public function client()
-	{
-		return $this->belongsTo(Client::class, 'client_id');
-	}
+    public function client()
+    {
+        return $this->belongsTo(Client::class, 'client_id');
+    }
 
-	public function order_products()
-	{
-		return $this->hasMany(OrderProduct::class, 'order_id');
-	}
+    public function order_products()
+    {
+        return $this->hasMany(OrderProduct::class, 'order_id');
+    }
 
-	public function payments()
-	{
-		return $this->hasMany(Payment::class, 'order_id');
-	}
+    public function payments()
+    {
+        return $this->hasMany(Payment::class, 'order_id');
+    }
 
-	public function shipments()
-	{
-		return $this->hasMany(Shipment::class, 'order_id');
-	}
+    public function shipments()
+    {
+        return $this->hasMany(Shipment::class, 'order_id');
+    }
 
+    public function scopeRelationsJson(Builder $query)
+    {
+
+        return  $query->with([
+            'client' => function ($query) {
+                $query->select(
+                    'id',
+                    'name',
+                    'is_company',
+                    'doc_ssn',
+                    'doc_country',
+                    'doc_state',
+                    'birthday',
+                    'is_verified',
+                    'note'
+                );
+            }, 'order_products' => function ($query) {
+
+                $query->select('id', 'sku', 'order_id', 'product_id')
+                    ->with(['product' => function ($query) {
+
+                        $query->select('id', 'sku', 'name');
+                    }]);
+            },
+            'shipments'
+        ]);
+    }
 }

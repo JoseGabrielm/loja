@@ -9,11 +9,15 @@ use App\Models\State;
 use App\Models\Address;
 use Livewire\Component;
 use App\Models\Shipment;
+use App\Mail\SendOrderPaid;
 use App\Models\OrderProduct;
 use Illuminate\Http\Request;
+use App\Mail\SendOrderPlaced;
 use App\Classes\CreatePayCard;
 use App\Classes\CreatePayBillet;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
+use App\Http\Livewire\Admin\Mail\HelperMail;
 
 class Checkouts extends Component
 {
@@ -37,7 +41,7 @@ class Checkouts extends Component
     public $orderId;
 
     public Shipment $shipment;
-    public Address $address;
+    public $address;
     public $states;
     public $cities;
     public $cityName;
@@ -60,12 +64,11 @@ class Checkouts extends Component
         $user = auth()->user();
         $this->client = $user->client;
 
-        $this->address = $this->client->addresses->where('type', 'like', 'entrega')->first();
+        $this->address = Shipment::where('order_id', $request->order_id)->first();
         $this->order = $this->client->orders->where('id', $request->order_id)->first();
 
         if ($this->order) {
             $this->details = $this->order->order_products;
-
         } else {
             return redirect()->route('front.shop');
         }
@@ -77,23 +80,18 @@ class Checkouts extends Component
         $this->orderId = $request->order_id;
 
 
-        if ($this->order->url_pay and $this->order->payby == 'billet'){
+        if ($this->order->url_pay and $this->order->payby == 'billet') {
 
-            session()->flash('billetExists', 'Essa compra já possui um boleto associado. Você pode visualiza-lo em:'  );
+            session()->flash('billetExists', 'Essa compra já possui um boleto associado. Você pode visualiza-lo em:');
             $this->modifyRadioBillet();
+        } elseif ($this->order->payby == 'deposit') {
 
-        }elseif($this->order->payby == 'deposit'){
-
-            session()->flash('depositExists', 'Essa compra foi marcado com pagamento via deposito'  );
+            session()->flash('depositExists', 'Essa compra foi marcado com pagamento via deposito');
             $this->modifyRadioDeposit();
+        } elseif ($this->order->payby == 'credit_card' or $this->order->payby == 'link') {
 
-
-        }elseif($this->order->payby == 'credit_card' or $this->order->payby == 'link'){
-
-            session()->flash('creditcardExists', 'Essa compra foi marcado com pagamento via cartão de crédito'  );
+            session()->flash('creditcardExists', 'Essa compra foi marcado com pagamento via cartão de crédito');
             $this->modifyRadioCard();
-
-
         }
     }
 
@@ -136,21 +134,26 @@ class Checkouts extends Component
                 $this->order->update();
                 //abrir boleto em uma nova pagina com javascript
                 $this->dispatchBrowserEvent('billet-page', ['url' => $response['data']['link']]);
-                session()->flash('message','Boleto gerado com sucesso!');
 
-                //ou abrir boleto na mesma pagina
-                //return redirect()->to($response);
+                session()->flash('message', 'Boleto gerado com sucesso!');
+
+                //enviar mensagem sobre a compra para email do usuario
+
+
+
+
+                $data = HelperMail::fetchData($this->order, '');
+                $email = new SendOrderPlaced($data);
+
+                Cart::destroy();
             } else {
                 dd('erro' . $response);
                 session()->flash('message', $response['error_description'] . ' - Corrija seus dados no menu: MEUS DADOS');
             }
-
-            Cart::destroy();
-
         }
     }
 
-     public function payCard()
+    public function payCard()
     {
 
         $cobrancaCard = new CreatePayCard();
@@ -159,10 +162,10 @@ class Checkouts extends Component
         //verifica se response é nula antes de prosseguir
         //se for não fara nada e exibira o erro atribuido a sessão dentro da classe paycard
 
-        if($response !== null && is_array($response)){
+        if ($response !== null && is_array($response)) {
 
 
-            if($response['code'] == 200){
+            if ($response['code'] == 200) {
 
 
 
@@ -176,9 +179,7 @@ class Checkouts extends Component
 
                 session()->flash('message', 'Obrigado pela compra. Prepararemos seu pedido enquanto aguardamos a confirmação do pagamento.');
                 $this->dispatchBrowserEvent('paymentLink-page', ['url' => $response['data']['payment_url']]);
-
-
-            }else{
+            } else {
 
 
                 session()->flash(
@@ -190,28 +191,21 @@ class Checkouts extends Component
                 );
 
                 Log::channel('gerenciaNet')->info('Pedido: ' . $this->order->id . ' > ' . json_encode($response));
-
             }
-
-        }else{
+        } else {
 
 
 
 
             session()->flash(
-                'error', 'Esse link já foi acessado e pago por alguém.
-                Se deseja fazer alguma alteração a respeito do pagamento via cartão, favor contatar nossa equipe de vendas.');
+                'error',
+                'Esse link já foi acessado e pago por alguém.
+                Se deseja fazer alguma alteração a respeito do pagamento via cartão, favor contatar nossa equipe de vendas.'
+            );
 
             Log::channel('gerenciaNet')->info('Pedido: ' . $this->order->id . ' > ' . $response);
-
-
-
-
         }
-
     }
-
-
 
     private function getItemsCart()
     {
@@ -227,15 +221,10 @@ class Checkouts extends Component
             $items[$key]['name'] = $item->product->name;
             $items[$key]['value'] = $item->unitary_price;
             $items[$key]['amount'] = $item->amount;
-
         }
 
         return $items;
-
     }
-
-
-
 
 
     public function modifyRadioDeposit()
@@ -286,14 +275,15 @@ class Checkouts extends Component
         $this->Validate();
         //dd($this->form->toArray());
         $this->address->save();
+
+        dd($this->address);
+
         $this->editShippingModal = false;
         $this->clearValidation();
-
     }
 
     public function finishOrder()
     {
-
     }
 
     public function updatedSelectedState($state)

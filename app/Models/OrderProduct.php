@@ -44,38 +44,46 @@ use Illuminate\Database\Eloquent\Model;
  */
 class OrderProduct extends Model
 {
-	public $with = ['product'];
-	protected $table = 'order_products';
+    public $with = ['product'];
+    protected $table = 'order_products';
 
-	protected $casts = [
-		'amount' => 'int',
-		'unitary_price' => 'int',
-		'base_total' => 'int',
-		'discount_percent' => 'int',
-		'order_id' => 'int',
-		'product_id' => 'int'
-	];
+    protected $hidden = [
 
-	protected $fillable = [
-		'product_description',
-		'amount',
-		'unitary_price',
-		'base_currency',
-		'base_total',
-		'discount_percent',
-		'product_type',
-		'additional',
-		'order_id',
-		'product_id'
-	];
+        'id',
+        'order_id',
+        'product_id'
 
-	public function order()
-	{
-		return $this->belongsTo(Order::class, 'order_id');
-	}
+    ];
 
-	public function product()
-	{
-		return $this->belongsTo(Product::class, 'product_id');
-	}
+    protected $casts = [
+        'amount' => 'int',
+        'unitary_price' => 'int',
+        'base_total' => 'int',
+        'discount_percent' => 'int',
+        'order_id' => 'int',
+        'product_id' => 'int'
+    ];
+
+    protected $fillable = [
+        'product_description',
+        'amount',
+        'unitary_price',
+        'base_currency',
+        'base_total',
+        'discount_percent',
+        'product_type',
+        'additional',
+        'order_id',
+        'product_id'
+    ];
+
+    public function order()
+    {
+        return $this->belongsTo(Order::class, 'order_id');
+    }
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class, 'product_id');
+    }
 }

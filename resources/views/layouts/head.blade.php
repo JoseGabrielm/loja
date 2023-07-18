@@ -23,9 +23,11 @@
 
 
 
-<script src="{{ asset('js/app.js') }}" defer></script>
+<script defer src="{{ asset('js/app.js') }}"></script>
+<script defer src="{{ asset('js/masks.js') }}"></script>
 
 @stack('scripts-gn')
+
 
 
 

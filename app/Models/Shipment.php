@@ -65,45 +65,47 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Shipment extends Model
 {
-	protected $table = 'shipments';
+    protected $table = 'shipments';
 
-	protected $casts = [
-		'price_prod' => 'int',
-		'total_qty' => 'int',
-		'total_weight' => 'int',
-		'email_sent' => 'bool',
-		'orders_id' => 'int',
-		'carriers_id' => 'int'
-	];
+    protected $casts = [
+        'price_prod' => 'int',
+        'total_qty' => 'int',
+        'total_weight' => 'int',
+        'email_sent' => 'bool',
+        'order_id' => 'int',
+        'carrier_id' => 'int'
+    ];
 
-	protected $fillable = [
-		'status',
-		'sku',
-		'description',
-		'price_prod',
-		'total_qty',
-		'total_weight',
-		'packing_width',
-		'packing_height',
-		'packing_lenght',
-		'track_number',
-		'email_sent',
-		'additional',
-		'type',
-		'postcode',
-		'address',
-		'number',
-		'neighborhood',
-		'complement'
-	];
+    protected $fillable = [
+        'status',
+        'sku',
+        'order_id',
+        'carrier_id',
+        'description',
+        'price_prod',
+        'total_qty',
+        'total_weight',
+        'packing_width',
+        'packing_height',
+        'packing_lenght',
+        'track_number',
+        'email_sent',
+        'additional',
+        'type',
+        'postcode',
+        'address',
+        'number',
+        'neighborhood',
+        'complement'
+    ];
 
-	public function order()
-	{
-		return $this->belongsTo(Order::class, 'order_id');
-	}
+    public function order()
+    {
+        return $this->belongsTo(Order::class, 'order_id');
+    }
 
-	public function carrier()
-	{
-		return $this->belongsTo(Carrier::class, 'carrier_id');
-	}
+    public function carrier()
+    {
+        return $this->belongsTo(Carrier::class, 'carrier_id');
+    }
 }

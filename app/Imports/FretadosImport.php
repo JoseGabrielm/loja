@@ -19,6 +19,10 @@ class FretadosImport implements ToModel, WithHeadingRow, WithChunkReading
 
     public function model(array $row)
     {
+
+
+        $price = ((int)$row['value'] * 100);
+
         if(array_key_exists('id', $row)) {
             Fretado::where('id', $row['id'])
             ->update([
@@ -31,11 +35,6 @@ class FretadosImport implements ToModel, WithHeadingRow, WithChunkReading
                 'deadline' => $row['deadline']
             ]);
         }else{
-
-
-            Log::info((int)$row['value']);
-            $price = ((int)$row['value'] * 100);
-
             Fretado::create([
                 'region' => $row['region'],
                 'zipini' => $row['zipini'],

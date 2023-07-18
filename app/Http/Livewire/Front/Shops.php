@@ -4,7 +4,11 @@ namespace App\Http\Livewire\Front;
 
 use App\Models\Group;
 use Livewire\Component;
+
+
 use Illuminate\Support\Facades\Auth;
+
+
 
 class Shops extends Component
 {
@@ -25,8 +29,6 @@ class Shops extends Component
         ->when($this->cat != 'todos', function($queryBuilder) { return $queryBuilder->where('category_id', $this->cat); });
         //dd($shops);
         return $shops->get();
-
-
 
 
     }
